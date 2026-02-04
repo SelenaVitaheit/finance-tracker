@@ -1,0 +1,106 @@
+<%= form_with(model: transaction, local: true) do |form| %>
+  <% if transaction.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(transaction.errors.count, "error") %> prohibited this transaction from being saved:</h4>
+      <ul>
+        <% transaction.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <%= form.label :transaction_type, 'Тип транзакции', class: 'form-label' %>
+        <div class="btn-group w-100" role="group">
+          <%= form.radio_button :transaction_type, 'income', class: 'btn-check', id: 'transaction_type_income' %>
+          <%= form.label :transaction_type_income, 'Доход', class: 'btn btn-outline-success', for: 'transaction_type_income' %>
+          
+          <%= form.radio_button :transaction_type, 'expense', class: 'btn-check', id: 'transaction_type_expense' %>
+          <%= form.label :transaction_type_expense, 'Расход', class: 'btn btn-outline-danger', for: 'transaction_type_expense' %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="mb-3">
+        <%= form.label :category_id, 'Категория', class: 'form-label' %>
+        <%= form.select :category_id, 
+            options_from_collection_for_select(@categories, :id, :display_name, transaction.category_id),
+            { include_blank: 'Выберите категорию' },
+            class: 'form-select',
+            required: true %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <%= form.label :amount, 'Сумма', class: 'form-label' %>
+        <div class="input-group">
+          <%= form.number_field :amount, 
+              class: 'form-control', 
+              step: '0.01',
+              min: '0.01',
+              required: true %>
+          <span class="input-group-text">₽</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="mb-3">
+        <%= form.label :date, 'Дата', class: 'form-label' %>
+        <%= form.date_field :date, class: 'form-control', required: true %>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, 'Описание', class: 'form-label' %>
+    <%= form.text_area :description, 
+        class: 'form-control', 
+        rows: 3,
+        placeholder: 'Опишите транзакцию...' %>
+  </div>
+
+  <div class="d-flex justify-content-between">
+    <%= form.submit transaction.persisted? ? 'Обновить' : 'Создать', 
+        class: 'btn btn-primary' %>
+    <%= link_to 'Отмена', transactions_path, class: 'btn btn-outline-secondary' %>
+  </div>
+<% end %>
+
+<!-- JavaScript для переключения стилей кнопок типа -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const incomeRadio = document.getElementById('transaction_type_income');
+  const expenseRadio = document.getElementById('transaction_type_expense');
+  const incomeLabel = document.querySelector('label[for="transaction_type_income"]');
+  const expenseLabel = document.querySelector('label[for="transaction_type_expense"]');
+  
+  function updateButtonStyles() {
+    if (incomeRadio.checked) {
+      incomeLabel.classList.remove('btn-outline-success');
+      incomeLabel.classList.add('btn-success');
+      expenseLabel.classList.remove('btn-danger');
+      expenseLabel.classList.add('btn-outline-danger');
+    } else if (expenseRadio.checked) {
+      expenseLabel.classList.remove('btn-outline-danger');
+      expenseLabel.classList.add('btn-danger');
+      incomeLabel.classList.remove('btn-success');
+      incomeLabel.classList.add('btn-outline-success');
+    }
+  }
+  
+  // Инициализация
+  updateButtonStyles();
+  
+  // Обработчики изменений
+  incomeRadio.addEventListener('change', updateButtonStyles);
+  expenseRadio.addEventListener('change', updateButtonStyles);
+});
+</script>

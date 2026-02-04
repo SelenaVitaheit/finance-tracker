@@ -1,0 +1,171 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h2 class="mb-0">Просмотр транзакции</h2>
+          <div class="badge bg-<%= @transaction.transaction_type == 'income' ? 'success' : 'danger' %> fs-6">
+            <%= @transaction.transaction_type == 'income' ? 'Доход' : 'Расход' %>
+          </div>
+        </div>
+        
+        <div class="card-body">
+          <!-- Основная информация -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body text-center">
+                  <h5 class="card-title text-muted">Сумма</h5>
+                  <p class="display-6 <%= @transaction.transaction_type == 'income' ? 'text-success' : 'text-danger' %>">
+                    <%= @transaction.display_amount %>
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Детали</h5>
+                  <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <strong>Дата:</strong> 
+                      <span class="float-end"><%= l(@transaction.date, format: :long) %></span>
+                    </li>
+                    <li class="mb-2">
+                      <strong>Категория:</strong>
+                      <span class="float-end badge bg-secondary">
+                        <%= @transaction.category&.name || 'Без категории' %>
+                      </span>
+                    </li>
+                    <li class="mb-2">
+                      <strong>Создана:</strong>
+                      <span class="float-end"><%= l(@transaction.created_at, format: :short) %></span>
+                    </li>
+                    <li>
+                      <strong>Обновлена:</strong>
+                      <span class="float-end"><%= l(@transaction.updated_at, format: :short) %></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Описание -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="mb-0">Описание</h5>
+            </div>
+            <div class="card-body">
+              <% if @transaction.description.present? %>
+                <p class="card-text"><%= @transaction.description %></p>
+              <% else %>
+                <p class="card-text text-muted fst-italic">Описание отсутствует</p>
+              <% end %>
+            </div>
+          </div>
+          
+          <!-- Действия -->
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Действия</h5>
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <%= link_to 'Редактировать', edit_transaction_path(@transaction), class: 'btn btn-primary me-2' %>
+                <%= link_to 'Назад к списку', transactions_path, class: 'btn btn-outline-secondary me-2' %>
+                <%= link_to 'Удалить', @transaction, 
+                    method: :delete,
+                    data: { 
+                      confirm: 'Вы уверены, что хотите удалить эту транзакцию?',
+                      turbo_confirm: 'Вы уверены, что хотите удалить эту транзакцию?'
+                    },
+                    class: 'btn btn-outline-danger' %>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-footer text-muted text-center">
+          <small>ID транзакции: <%= @transaction.id %></small>
+        </div>
+      </div>
+      
+      <!-- Навигация по соседним транзакциям -->
+      <% prev_transaction = @transaction.user.transactions.where('id < ?', @transaction.id).order(id: :desc).first %>
+      <% next_transaction = @transaction.user.transactions.where('id > ?', @transaction.id).order(id: :asc).first %>
+      
+      <% if prev_transaction || next_transaction %>
+        <div class="card mt-4">
+          <div class="card-body">
+            <div class="row">
+              <% if prev_transaction %>
+                <div class="col-md-6">
+                  <%= link_to transaction_path(prev_transaction), class: 'text-decoration-none' do %>
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-chevron-left me-2"></i>
+                      <div>
+                        <small class="text-muted">Предыдущая</small>
+                        <div class="fw-bold">
+                          <%= truncate(prev_transaction.description, length: 30) %>
+                        </div>
+                        <small class="text-muted">
+                          <%= l(prev_transaction.date, format: :short) %> • 
+                          <span class="<%= prev_transaction.transaction_type == 'income' ? 'text-success' : 'text-danger' %>">
+                            <%= prev_transaction.display_amount %>
+                          </span>
+                        </small>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              
+              <% if next_transaction %>
+                <div class="col-md-6 text-end">
+                  <%= link_to transaction_path(next_transaction), class: 'text-decoration-none' do %>
+                    <div class="d-flex align-items-center justify-content-end">
+                      <div>
+                        <small class="text-muted">Следующая</small>
+                        <div class="fw-bold">
+                          <%= truncate(next_transaction.description, length: 30) %>
+                        </div>
+                        <small class="text-muted">
+                          <%= l(next_transaction.date, format: :short) %> • 
+                          <span class="<%= next_transaction.transaction_type == 'income' ? 'text-success' : 'text-danger' %>">
+                            <%= next_transaction.display_amount %>
+                          </span>
+                        </small>
+                      </div>
+                      <i class="bi bi-chevron-right ms-2"></i>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Стили для иконок (если нет Bootstrap Icons) -->
+<style>
+  .bi {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    fill: currentColor;
+  }
+  
+  .bi-chevron-left::before {
+    content: "‹";
+  }
+  
+  .bi-chevron-right::before {
+    content: "›";
+  }
+</style>

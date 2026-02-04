@@ -1,0 +1,29 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="mb-0">Новая транзакция</h2>
+        </div>
+        <div class="card-body">
+          <%= render 'form', transaction: @transaction %>
+        </div>
+        <div class="card-footer text-muted">
+          <small>Транзакция будет привязана к вашему аккаунту.</small>
+        </div>
+      </div>
+      
+      <div class="mt-4">
+        <div class="alert alert-info">
+          <h5 class="alert-heading">Подсказки:</h5>
+          <ul class="mb-0">
+            <li><strong>Доход</strong> - деньги, которые вы получаете (зарплата, подарки и т.д.)</li>
+            <li><strong>Расход</strong> - деньги, которые вы тратите (покупки, услуги и т.д.)</li>
+            <li>Вы можете создать новые категории в разделе "Категории" (будет доступно позже)</li>
+            <li>Дата по умолчанию - сегодня, но можно изменить</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

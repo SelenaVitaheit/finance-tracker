@@ -6,8 +6,10 @@ Rails.application.routes.draw do
   root "home#index"
   get "home/index"
   
-  # Будем добавлять здесь маршруты для транзакций, категорий, целей
-  # resources :transactions
+  # Ресурсные маршруты для транзакций (CRUD)
+  resources :transactions
+  
+  # В будущем добавим:
   # resources :categories  
   # resources :goals
 end

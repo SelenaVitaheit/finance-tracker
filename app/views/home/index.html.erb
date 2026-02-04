@@ -1,2 +1,140 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      <h1 class="display-4 mb-4">Добро пожаловать в Finance Tracker! 👋</h1>
+      <p class="lead mb-5">
+        Простое и удобное приложение для учета личных финансов.
+        Следите за доходами, расходами и достигайте финансовых целей.
+      </p>
+      
+      <% if user_signed_in? %>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2 class="card-title">Рады снова видеть, <%= current_user.email %>!</h2>
+            <p class="card-text">Что бы вы хотели сделать?</p>
+            
+            <div class="row mt-4">
+              <div class="col-md-4 mb-3">
+                <%= link_to transactions_path, class: 'text-decoration-none' do %>
+                  <div class="card h-100 border-primary">
+                    <div class="card-body text-center">
+                      <h3 class="text-primary">💸</h3>
+                      <h5 class="card-title">Транзакции</h5>
+                      <p class="card-text">Управляйте доходами и расходами</p>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <div class="card h-100 border-secondary">
+                  <div class="card-body text-center">
+                    <h3 class="text-secondary">📊</h3>
+                    <h5 class="card-title">Статистика</h5>
+                    <p class="card-text"><em>Скоро будет доступно</em></p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-4 mb-3">
+                <div class="card h-100 border-secondary">
+                  <div class="card-body text-center">
+                    <h3 class="text-secondary">🎯</h3>
+                    <h5 class="card-title">Цели</h5>
+                    <p class="card-text"><em>Скоро будет доступно</em></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <%= link_to 'Перейти к транзакциям →', transactions_path, class: 'btn btn-primary btn-lg me-md-2' %>
+          <%= link_to 'Выйти', destroy_user_session_path, method: :delete, class: 'btn btn-outline-secondary btn-lg' %>
+        </div>
+      <% else %>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2 class="card-title">Начните управлять финансами уже сегодня!</h2>
+            <p class="card-text">Зарегистрируйтесь или войдите в систему.</p>
+            
+            <div class="row mt-4">
+              <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <h3 class="text-success">📈</h3>
+                    <h5 class="card-title">Контролируйте доходы</h5>
+                    <p class="card-text">Отслеживайте все источники дохода</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <h3 class="text-danger">📉</h3>
+                    <h5 class="card-title">Анализируйте расходы</h5>
+                    <p class="card-text">Поймите, куда уходят деньги</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <h3 class="text-info">🎯</h3>
+                    <h5 class="card-title">Достигайте целей</h5>
+                    <p class="card-text">Копите на важные покупки</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <h3 class="text-warning">📊</h3>
+                    <h5 class="card-title">Получайте отчеты</h5>
+                    <p class="card-text">Наглядная статистика и графики</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <%= link_to 'Зарегистрироваться →', new_user_registration_path, class: 'btn btn-success btn-lg me-md-2' %>
+          <%= link_to 'Войти', new_user_session_path, class: 'btn btn-primary btn-lg' %>
+        </div>
+      <% end %>
+      
+      <hr class="my-5">
+      
+      <div class="text-start">
+        <h3>📋 О проекте</h3>
+        <p>Это учебный проект, разрабатываемый в рамках курса по Ruby on Rails.</p>
+        
+        <h5 class="mt-4">🎯 Цели проекта:</h5>
+        <ul>
+          <li>Практика Ruby on Rails разработки</li>
+          <li>Создание полноценного веб-приложения</li>
+          <li>Изучение Devise для аутентификации</li>
+          <li>Работа с Bootstrap для UI</li>
+          <li>Реализация CRUD операций</li>
+        </ul>
+        
+        <h5 class="mt-4">🛠 Технологии:</h5>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge bg-primary">Ruby on Rails 8</span>
+          <span class="badge bg-success">SQLite</span>
+          <span class="badge bg-info">Devise</span>
+          <span class="badge bg-warning">Bootstrap 5</span>
+          <span class="badge bg-danger">Kaminari</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
