@@ -2,14 +2,15 @@ Rails.application.routes.draw do
   # Devise маршруты для аутентификации
   devise_for :users
   
-  # Корневой маршрут
-  root "home#index"
+  # Корневой маршрут - теперь Dashboard
+  root "dashboard#index"
+  
+  # Основные маршруты
   get "home/index"
+  get "dashboard/index"
   
-  # Ресурсные маршруты для транзакций (CRUD)
+  # Ресурсные маршруты
   resources :transactions
-  
-  # В будущем добавим:
-  # resources :categories  
-  # resources :goals
+  # resources :categories  # будет добавлено позже
+  # resources :goals       # будет добавлено позже
 end
