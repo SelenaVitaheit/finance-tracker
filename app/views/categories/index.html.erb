@@ -1,0 +1,105 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>📂 Категории</h1>
+      <p class="text-muted mb-0">Управление категориями доходов и расходов</p>
+    </div>
+    <div>
+      <%= link_to '➕ Категория дохода', new_category_path(category_type: 'income'), 
+          class: 'btn btn-success me-2' %>
+      <%= link_to '➕ Категория расхода', new_category_path(category_type: 'expense'), 
+          class: 'btn btn-info' %>
+    </div>
+  </div>
+
+  <!-- Категории доходов -->
+  <div class="card mb-4">
+    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">📈 Категории доходов</h5>
+      <span class="badge bg-light text-dark"><%= @income_categories.count %> категорий</span>
+    </div>
+    <div class="card-body">
+      <% if @income_categories.any? %>
+        <div class="row">
+          <% @income_categories.each do |category| %>
+            <div class="col-md-4 mb-3">
+              <div class="card border-success">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="card-title mb-0">
+                      <%= category.name %>
+                    </h6>
+                    <div>
+                      <%= link_to '✏️', edit_category_path(category), 
+                          class: 'btn btn-sm btn-outline-warning me-1' %>
+                      <%= link_to '🗑️', category, 
+                          method: :delete,
+                          data: { confirm: 'Удалить категорию?' },
+                          class: 'btn btn-sm btn-outline-danger' %>
+                    </div>
+                  </div>
+                  <small class="text-muted">
+                    <%= category.transactions.count %> транзакций
+                  </small>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-4">
+          <i class="bi bi-cash-coin display-4 text-muted"></i>
+          <p class="text-muted mt-2">Нет категорий доходов</p>
+          <%= link_to 'Создать категорию дохода', new_category_path(category_type: 'income'), 
+              class: 'btn btn-outline-success' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Категории расходов -->
+  <div class="card">
+    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">📉 Категории расходов</h5>
+      <span class="badge bg-light text-dark"><%= @expense_categories.count %> категорий</span>
+    </div>
+    <div class="card-body">
+      <% if @expense_categories.any? %>
+        <div class="row">
+          <% @expense_categories.each do |category| %>
+            <div class="col-md-4 mb-3">
+              <div class="card border-info">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="card-title mb-0">
+                      <%= category.name %>
+                    </h6>
+                    <div>
+                      <%= link_to '✏️', edit_category_path(category), 
+                          class: 'btn btn-sm btn-outline-warning me-1' %>
+                      <%= button_to '🗑️', category, 
+    			method: :delete,
+    			form: { data: { turbo_confirm: 'Удалить категорию?' } },
+    			class: 'btn btn-sm btn-outline-danger border-0 bg-transparent p-0',
+    			title: 'Удалить категорию' %>
+                    </div>
+                  </div>
+                  <small class="text-muted">
+                    <%= category.transactions.count %> транзакций
+                  </small>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-4">
+          <i class="bi bi-cart display-4 text-muted"></i>
+          <p class="text-muted mt-2">Нет категорий расходов</p>
+          <%= link_to 'Создать категорию расхода', new_category_path(category_type: 'expense'), 
+              class: 'btn btn-outline-info' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

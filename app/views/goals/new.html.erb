@@ -1,0 +1,43 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">🎯 Создание новой финансовой цели</h3>
+        </div>
+        <div class="card-body">
+          <%= render 'form', goal: @goal %>
+        </div>
+      </div>
+      
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5 class="mb-0">💡 Советы по постановке финансовых целей</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>📊 SMART принципы:</h6>
+              <ul class="small">
+                <li><strong>S</strong>pecific (Конкретная) - "Накопить 100,000 ₽"</li>
+                <li><strong>M</strong>easurable (Измеримая) - точная сумма и срок</li>
+                <li><strong>A</strong>chievable (Достижимая) - реальные сроки и суммы</li>
+                <li><strong>R</strong>elevant (Актуальная) - важная для вас цель</li>
+                <li><strong>T</strong>ime-bound (Ограниченная по времени) - четкий дедлайн</li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <h6>🎯 Примеры целей:</h6>
+              <ul class="small">
+                <li>Накопить 150,000 ₽ на отпуск за 6 месяцев</li>
+                <li>Купить ноутбук за 80,000 ₽ за 3 месяца</li>
+                <li>Создать резервный фонд 300,000 ₽ за 1 год</li>
+                <li>Накопить 50,000 ₽ на подарок к Новому году</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

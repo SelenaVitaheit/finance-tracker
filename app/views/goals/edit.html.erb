@@ -1,0 +1,46 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header bg-warning">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">✏️ Редактирование цели</h3>
+            <span class="badge bg-<%= @goal.completed? ? 'success' : 'light' %>">
+              <%= @goal.completed? ? '✅ Выполнена' : 'В процессе' %>
+            </span>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Текущая статистика -->
+          <div class="alert alert-info">
+            <div class="row">
+              <div class="col-md-4">
+                <strong>Текущий прогресс:</strong>
+                <div class="h4"><%= @goal.progress_percentage %>%</div>
+              </div>
+              <div class="col-md-4">
+                <strong>Осталось накопить:</strong>
+                <div class="h4 <%= @goal.amount_remaining > 0 ? 'text-danger' : 'text-success' %>">
+                  <%= number_to_currency(@goal.amount_remaining, unit: '₽') %>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <strong>Дней до срока:</strong>
+                <div class="h4 <%= @goal.days_remaining > 30 ? 'text-success' : @goal.days_remaining > 7 ? 'text-warning' : 'text-danger' %>">
+                  <%= @goal.days_remaining %>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <%= render 'form', goal: @goal %>
+        </div>
+      </div>
+      
+      <div class="d-flex justify-content-center mt-4">
+        <%= link_to '← Назад к списку целей', goals_path, class: 'btn btn-outline-secondary me-2' %>
+        <%= link_to '👁️ Просмотреть цель', @goal, class: 'btn btn-outline-primary' %>
+      </div>
+    </div>
+  </div>
+</div>

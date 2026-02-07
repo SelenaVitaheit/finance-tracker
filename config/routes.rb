@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
+  get "categories/index"
+  get "categories/show"
+  get "categories/new"
+  get "categories/edit"
   # Devise маршруты для аутентификации
   devise_for :users
   
-  # Корневой маршрут - теперь Dashboard
+  # Корневой маршрут
   root "dashboard#index"
   
   # Основные маршруты
@@ -11,6 +15,6 @@ Rails.application.routes.draw do
   
   # Ресурсные маршруты
   resources :transactions
-  # resources :categories  # будет добавлено позже
-  # resources :goals       # будет добавлено позже
+  resources :goals
+  resources :categories  # будет добавлено позже
 end

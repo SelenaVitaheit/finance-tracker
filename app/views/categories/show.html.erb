@@ -1,0 +1,94 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header <%= @category.category_type == 'income' ? 'bg-success' : 'bg-info' %> text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <%= @category.category_type == 'income' ? '📈 Категория дохода' : '📉 Категория расхода' %>
+            </h4>
+            <div>
+              <%= link_to '✏️ Редактировать', edit_category_path(@category), class: 'btn btn-light btn-sm me-1' %>
+              <%= link_to '🗑️ Удалить', @category, 
+                  method: :delete,
+                  data: { confirm: 'Удалить категорию?' },
+                  class: 'btn btn-light btn-sm' %>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h5>📋 Информация о категории</h5>
+              <table class="table">
+                <tr>
+                  <th width="40%">Название:</th>
+                  <td><strong><%= @category.name %></strong></td>
+                </tr>
+                <tr>
+                  <th>Тип:</th>
+                  <td>
+                    <span class="badge <%= @category.category_type == 'income' ? 'bg-success' : 'bg-info' %>">
+                      <%= @category.category_type == 'income' ? '📈 Доход' : '📉 Расход' %>
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Транзакций:</th>
+                  <td>
+                    <span class="badge bg-secondary">
+                      <%= @category.transactions.count %>
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Создана:</th>
+                  <td><%= time_ago_in_words(@category.created_at) %> назад</td>
+                </tr>
+                <tr>
+                  <th>Обновлена:</th>
+                  <td><%= time_ago_in_words(@category.updated_at) %> назад</td>
+                </tr>
+              </table>
+            </div>
+            
+            <div class="col-md-6">
+              <h5>💰 Суммарно</h5>
+              <% if @category.transactions.any? %>
+                <div class="alert <%= @category.category_type == 'income' ? 'alert-success' : 'alert-info' %>">
+                  <div class="h3 text-center">
+                    <%= number_to_currency(@category.transactions.sum(:amount), unit: '₽') %>
+                  </div>
+                  <p class="text-center mb-0">
+                    Всего по этой категории
+                  </p>
+                </div>
+                
+                <% if @category.category_type == 'expense' && @category.transactions.count > 0 %>
+                  <div class="alert alert-warning">
+                    <small>
+                      <i class="bi bi-exclamation-triangle"></i>
+                      Эта категория используется в <%= @category.transactions.count %> транзакциях.
+                      Удаление может повлиять на статистику.
+                    </small>
+                  </div>
+                <% end %>
+              <% else %>
+                <div class="alert alert-light text-center py-4">
+                  <i class="bi bi-receipt display-4 text-muted"></i>
+                  <p class="mt-2 mb-0">Пока нет транзакций в этой категории</p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <%= link_to '← Все категории', categories_path, class: 'btn btn-outline-secondary' %>
+            <%= link_to '➕ Новая транзакция', new_transaction_path(category_id: @category.id), 
+                class: 'btn btn-primary ms-2' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

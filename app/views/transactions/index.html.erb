@@ -120,9 +120,11 @@
                   <%= link_to 'Просмотр', transaction, class: 'btn btn-outline-primary' %>
                   <%= link_to 'Редактировать', edit_transaction_path(transaction), class: 'btn btn-outline-secondary' %>
                   <%= link_to 'Удалить', transaction, 
-                      method: :delete, 
-                      data: { confirm: 'Вы уверены?' },
-                      class: 'btn btn-outline-danger' %>
+    data: { 
+      turbo_method: :delete,
+      turbo_confirm: 'Вы уверены?'
+    },
+    class: 'btn btn-outline-danger' %>
                 </div>
               </td>
             </tr>

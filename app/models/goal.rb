@@ -5,7 +5,7 @@ class Goal < ApplicationRecord
   validates :target_amount, presence: true, numericality: { greater_than: 0 }
   validates :current_amount, numericality: { greater_than_or_equal_to: 0 }
   validates :deadline, presence: true
-  
+  validates :description, length: { maximum: 500 }
   # Валидация: deadline не может быть в прошлом
   validate :deadline_cannot_be_in_the_past
   

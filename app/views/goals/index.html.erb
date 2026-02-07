@@ -1,0 +1,203 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>🎯 Мои финансовые цели</h1>
+      <p class="text-muted mb-0">Отслеживайте прогресс в достижении ваших финансовых целей</p>
+    </div>
+    <%= link_to '➕ Новая цель', new_goal_path, class: 'btn btn-primary' %>
+  </div>
+
+  <!-- Фильтры и сортировка -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-3">
+          <h6 class="mb-0">Фильтры:</h6>
+        </div>
+        <div class="col-md-9">
+          <div class="btn-group" role="group">
+            <%= link_to 'Все', goals_path, 
+                class: "btn btn-outline-secondary #{params[:status].blank? ? 'active' : ''}" %>
+            <%= link_to 'Активные', goals_path(status: 'active'), 
+                class: "btn btn-outline-success #{params[:status] == 'active' ? 'active' : ''}" %>
+            <%= link_to 'Выполненные', goals_path(status: 'completed'), 
+                class: "btn btn-outline-info #{params[:status] == 'completed' ? 'active' : ''}" %>
+            <%= link_to 'Просроченные', goals_path(status: 'expired'), 
+                class: "btn btn-outline-danger #{params[:status] == 'expired' ? 'active' : ''}" %>
+          </div>
+          
+          <div class="btn-group ms-3" role="group">
+            <%= link_to 'По сроку', goals_path(sort: 'deadline'), 
+                class: "btn btn-outline-secondary #{params[:sort] == 'deadline' ? 'active' : ''}" %>
+            <%= link_to 'По прогрессу', goals_path(sort: 'progress'), 
+                class: "btn btn-outline-secondary #{params[:sort] == 'progress' ? 'active' : ''}" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Статистика целей -->
+  <% if @goals.any? %>
+    <% total_goals = @goals.count %>
+    <% completed_goals = @goals.select(&:completed?).count %>
+    <% active_goals = @goals.reject(&:completed?).count %>
+    <% expired_goals = @goals.select { |g| g.deadline < Date.today }.count %>
+    
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card bg-light">
+          <div class="card-body text-center">
+            <h5 class="card-title text-muted">Всего целей</h5>
+            <p class="display-6"><%= total_goals %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-success text-white">
+          <div class="card-body text-center">
+            <h5 class="card-title">Выполнено</h5>
+            <p class="display-6"><%= completed_goals %></p>
+            <small><%= total_goals > 0 ? (completed_goals * 100 / total_goals) : 0 %>%</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-warning">
+          <div class="card-body text-center">
+            <h5 class="card-title">Активные</h5>
+            <p class="display-6"><%= active_goals %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card bg-danger text-white">
+          <div class="card-body text-center">
+            <h5 class="card-title">Просрочено</h5>
+            <p class="display-6"><%= expired_goals %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Список целей -->
+  <% if @goals.any? %>
+    <div class="row">
+      <% @goals.each do |goal| %>
+        <div class="col-md-6 mb-4">
+          <div class="card h-100 <%= goal.completed? ? 'border-success' : goal.deadline < Date.today ? 'border-danger' : 'border-primary' %>">
+            <div class="card-header d-flex justify-content-between align-items-center <%= goal.completed? ? 'bg-success text-white' : goal.deadline < Date.today ? 'bg-danger text-white' : 'bg-primary text-white' %>">
+              <h5 class="mb-0">
+                <%= goal.title.truncate(30) %>
+                <% if goal.completed? %>
+                  <span class="badge bg-light text-dark">✅ Выполнена</span>
+                <% elsif goal.deadline < Date.today %>
+                  <span class="badge bg-light text-dark">⏰ Просрочена</span>
+                <% end %>
+              </h5>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  Действия
+                </button>
+                <ul class="dropdown-menu">
+                  <li><%= link_to 'Просмотр', goal, class: 'dropdown-item' %></li>
+                  <li><%= link_to 'Редактировать', edit_goal_path(goal), class: 'dropdown-item' %></li>
+                 <li class="dropdown-item p-0">
+  <%= button_to 'Удалить', goal, 
+      method: :delete,
+      form: { 
+        data: { confirm: 'Удалить эту цель?' },
+        class: 'w-100'
+      },
+      class: 'btn btn-link text-danger text-decoration-none w-100 text-start px-3 py-2 border-0 bg-transparent' %>
+</li>
+                  <% unless goal.completed? %>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><%= link_to 'Добавить сумму', "#", class: 'dropdown-item disabled' %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <!-- Прогресс-бар -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                  <span class="text-muted">Прогресс</span>
+                  <span class="fw-bold"><%= goal.progress_percentage %>%</span>
+                </div>
+                <%= progress_bar(goal.progress_percentage) %>
+              </div>
+              
+              <!-- Суммы -->
+              <div class="row mb-3">
+                <div class="col">
+                  <small class="text-muted">Текущая сумма</small>
+                  <div class="h5 <%= goal.completed? ? 'text-success' : 'text-primary' %>">
+                    <%= number_to_currency(goal.current_amount, unit: '₽') %>
+                  </div>
+                </div>
+                <div class="col">
+                  <small class="text-muted">Целевая сумма</small>
+                  <div class="h5">
+                    <%= number_to_currency(goal.target_amount, unit: '₽') %>
+                  </div>
+                </div>
+                <div class="col">
+                  <small class="text-muted">Осталось</small>
+                  <div class="h5 <%= goal.amount_remaining > 0 ? 'text-danger' : 'text-success' %>">
+                    <%= number_to_currency(goal.amount_remaining, unit: '₽') %>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Дедлайн -->
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <small class="text-muted">
+                    <i class="bi bi-calendar me-1"></i>
+                    Срок: <%= format_date(goal.deadline) %>
+                  </small>
+                </div>
+                <div>
+                  <span class="badge bg-<%= goal.days_remaining > 30 ? 'success' : goal.days_remaining > 7 ? 'warning' : 'danger' %>">
+                    <% if goal.days_remaining > 0 %>
+                      Осталось <%= goal.days_remaining %> дней
+                    <% elsif goal.days_remaining == 0 %>
+                      Последний день!
+                    <% else %>
+                      Просрочено на <%= -goal.days_remaining %> дней
+                    <% end %>
+                  </span>
+                </div>
+              </div>
+              
+              <!-- Описание -->
+              <% if goal.description.present? %>
+                <hr>
+                <p class="card-text"><small><%= goal.description.truncate(100) %></small></p>
+              <% end %>
+            </div>
+            
+            <div class="card-footer bg-transparent">
+              <small class="text-muted">
+                Создана: <%= time_ago_in_words(goal.created_at) %> назад •
+                Обновлена: <%= time_ago_in_words(goal.updated_at) %> назад
+              </small>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <div class="mb-4">
+        <i class="bi bi-flag display-1 text-muted"></i>
+      </div>
+      <h3>Целей пока нет</h3>
+      <p class="text-muted mb-4">Создайте свою первую финансовую цель для отслеживания прогресса</p>
+      <%= link_to 'Создать первую цель', new_goal_path, class: 'btn btn-primary btn-lg' %>
+    </div>
+  <% end %>
+</div>

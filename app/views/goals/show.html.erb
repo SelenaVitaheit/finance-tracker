@@ -1,0 +1,229 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Заголовок и статус -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="display-6">🎯 <%= @goal.title %></h1>
+          <div class="text-muted">
+            <small>
+              Создана: <%= time_ago_in_words(@goal.created_at) %> назад • 
+              Обновлена: <%= time_ago_in_words(@goal.updated_at) %> назад
+            </small>
+          </div>
+        </div>
+        <div>
+          <span class="badge bg-<%= @goal.completed? ? 'success' : @goal.deadline < Date.today ? 'danger' : 'primary' %> fs-6">
+            <% if @goal.completed? %>
+              ✅ Цель выполнена
+            <% elsif @goal.deadline < Date.today %>
+              ⏰ Просрочена
+            <% else %>
+              🎯 В процессе
+            <% end %>
+          </span>
+        </div>
+      </div>
+
+      <!-- Основная статистика -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card text-center border-primary">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Прогресс</h6>
+              <div class="display-4 fw-bold text-primary">
+                <%= @goal.progress_percentage %>%
+              </div>
+              <div class="mt-3">
+                <%= progress_bar(@goal.progress_percentage, height: '10px') %>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card text-center border-success">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Текущая сумма</h6>
+              <div class="display-4 fw-bold text-success">
+                <%= number_to_currency(@goal.current_amount, unit: '₽', format: '%n') %>
+              </div>
+              <small class="text-muted">Накоплено</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card text-center border-info">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Целевая сумма</h6>
+              <div class="display-4 fw-bold text-info">
+                <%= number_to_currency(@goal.target_amount, unit: '₽', format: '%n') %>
+              </div>
+              <small class="text-muted">Нужно накопить</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="card text-center border-<%= @goal.amount_remaining > 0 ? 'danger' : 'success' %>">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Осталось</h6>
+              <div class="display-4 fw-bold text-<%= @goal.amount_remaining > 0 ? 'danger' : 'success' %>">
+                <%= number_to_currency(@goal.amount_remaining, unit: '₽', format: '%n') %>
+              </div>
+              <small class="text-muted">Еще нужно</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Дедлайн и время -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">📅 Сроки выполнения</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <small class="text-muted">Дата создания</small>
+                  <div class="fw-bold"><%= format_date(@goal.created_at.to_date) %></div>
+                </div>
+                <div class="col">
+                  <small class="text-muted">Срок выполнения</small>
+                  <div class="fw-bold <%= @goal.deadline < Date.today ? 'text-danger' : '' %>">
+                    <%= format_date(@goal.deadline) %>
+                  </div>
+                </div>
+                <div class="col">
+                  <small class="text-muted">Дней осталось</small>
+                  <div class="fw-bold <%= @goal.days_remaining > 30 ? 'text-success' : @goal.days_remaining > 7 ? 'text-warning' : 'text-danger' %>">
+                    <%= @goal.days_remaining %>
+                  </div>
+                </div>
+              </div>
+              
+              <% if @goal.days_remaining > 0 && !@goal.completed? %>
+                <div class="mt-3">
+                  <small class="text-muted">Рекомендуемое ежемесячное пополнение:</small>
+                  <div class="h4 text-primary">
+                    <%= number_to_currency(@goal.amount_remaining / (@goal.days_remaining / 30.0), unit: '₽') %>
+                    <small class="text-muted">/месяц</small>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-header">
+              <h5 class="mb-0">📈 Визуализация прогресса</h5>
+            </div>
+            <div class="card-body">
+              <div style="position: relative; height: 200px;">
+                <canvas id="goalProgressChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Описание -->
+      <% if @goal.description.present? %>
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">📝 Описание цели</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text"><%= simple_format(@goal.description) %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- Действия -->
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">⚡ Действия с целью</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <% unless @goal.completed? %>
+              <%= link_to '➕ Добавить сумму', "#", 
+                  class: 'btn btn-success me-2 disabled',
+                  title: 'Будет доступно позже' %>
+            <% end %>
+            
+            <%= link_to '✏️ Редактировать', edit_goal_path(@goal), 
+                class: 'btn btn-primary me-2' %>
+            
+            <%= link_to '📊 Все цели', goals_path, 
+                class: 'btn btn-outline-secondary me-2' %>         
+             </div>
+          
+          <% unless @goal.completed? %>
+            <div class="text-center mt-3">
+              <small class="text-muted">
+                <i class="bi bi-lightbulb me-1"></i>
+                Совет: Регулярно обновляйте текущую сумму для точного отслеживания прогресса
+              </small>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- История обновлений -->
+      <div class="text-center mt-4">
+        <small class="text-muted">
+          ID цели: <%= @goal.id %> • 
+          Последнее обновление: <%= @goal.updated_at.strftime('%d.%m.%Y %H:%M') %>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript для графика прогресса -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const ctx = document.getElementById('goalProgressChart').getContext('2d');
+  
+  const progress = <%= @goal.progress_percentage %>;
+  const remaining = 100 - progress;
+  
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Выполнено', 'Осталось'],
+      datasets: [{
+        data: [progress, remaining],
+        backgroundColor: [
+          progress >= 100 ? '#198754' : '#0dcaf0',
+          '#e9ecef'
+        ],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '70%',
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.raw.toFixed(1)}%`;
+            }
+          }
+        }
+      }
+    }
+  });
+});
+</script>

@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header <%= @category.category_type == 'income' ? 'bg-success' : 'bg-info' %> text-white">
+          <h4 class="mb-0">
+            <%= @category.category_type == 'income' ? '📈 Новая категория дохода' : '📉 Новая категория расхода' %>
+          </h4>
+        </div>
+        <div class="card-body">
+          <%= form_with(model: @category, local: true) do |form| %>
+            <% if @category.errors.any? %>
+              <div class="alert alert-danger">
+                <h5><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h5>
+                <ul>
+                  <% @category.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            
+            <div class="mb-3">
+              <%= form.label :name, "Название категории", class: "form-label" %>
+              <%= form.text_field :name, class: "form-control", placeholder: "Например: #{@category.category_type == 'income' ? 'Зарплата' : 'Продукты'}" %>
+            </div>
+            
+            <div class="mb-3">
+              <%= form.label :category_type, "Тип категории", class: "form-label" %>
+              <div>
+                <div class="form-check form-check-inline">
+                  <%= form.radio_button :category_type, 'income', class: "form-check-input", disabled: true %>
+                  <%= form.label :category_type_income, "📈 Доход", class: "form-check-label" %>
+                </div>
+                <div class="form-check form-check-inline">
+                  <%= form.radio_button :category_type, 'expense', class: "form-check-input", disabled: true %>
+                  <%= form.label :category_type_expense, "📉 Расход", class: "form-check-label" %>
+                </div>
+              </div>
+              <small class="text-muted">Тип категории нельзя изменить после создания</small>
+              <%= form.hidden_field :category_type %>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <%= link_to '← Назад', categories_path, class: 'btn btn-outline-secondary me-2' %>
+              <%= form.submit "Создать категорию", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
