@@ -6,3 +6,4 @@ gem 'puma', '>= 5.0'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 gem 'devise'
 gem 'kaminari'
+gem 'rspec-rails', '~> 7.0'

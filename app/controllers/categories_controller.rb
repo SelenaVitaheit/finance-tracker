@@ -45,15 +45,10 @@ class CategoriesController < ApplicationController
   end
   
   # DELETE /categories/1
-  def destroy
-    # Проверяем, нет ли транзакций в этой категории
-    if @category.transactions.any?
-      redirect_to categories_url, alert: 'Нельзя удалить категорию, к которой привязаны транзакции.'
-    else
-      @category.destroy
-      redirect_to categories_url, notice: 'Категория успешно удалена.', status: :see_other
-    end
-  end
+def destroy
+  @category.destroy
+  redirect_to categories_url, notice: 'Категория удалена.', status: :see_other
+end
   
   private
   

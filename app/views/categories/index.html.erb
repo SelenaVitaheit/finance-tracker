@@ -32,10 +32,13 @@
                     <div>
                       <%= link_to '✏️', edit_category_path(category), 
                           class: 'btn btn-sm btn-outline-warning me-1' %>
-                      <%= link_to '🗑️', category, 
-                          method: :delete,
-                          data: { confirm: 'Удалить категорию?' },
-                          class: 'btn btn-sm btn-outline-danger' %>
+                      <%= button_to '🗑️', category_path(category), 
+    				method: :delete,
+    				form: { 
+      				data: { turbo_confirm: 'Удалить категорию?' },
+     				 class: 'd-inline'
+    			},
+    class: 'btn btn-sm btn-outline-danger border-0 bg-transparent p-0' %>
                     </div>
                   </div>
                   <small class="text-muted">

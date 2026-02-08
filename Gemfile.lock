@@ -89,6 +89,7 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
+    diff-lcs (1.6.2)
     drb (2.2.3)
     erb (6.0.1)
     erubi (1.13.1)
@@ -199,6 +200,23 @@ GEM
     responders (3.2.0)
       actionpack (>= 7.0)
       railties (>= 7.0)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.7)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-rails (7.1.1)
+      actionpack (>= 7.0)
+      activesupport (>= 7.0)
+      railties (>= 7.0)
+      rspec-core (~> 3.13)
+      rspec-expectations (~> 3.13)
+      rspec-mocks (~> 3.13)
+      rspec-support (~> 3.13)
+    rspec-support (3.13.7)
     securerandom (0.4.1)
     sqlite3 (2.9.0-x64-mingw-ucrt)
     stringio (3.2.0)
@@ -227,6 +245,7 @@ DEPENDENCIES
   kaminari
   puma (>= 5.0)
   rails (~> 8.1.2)
+  rspec-rails (~> 7.0)
   sqlite3
   tzinfo-data
 

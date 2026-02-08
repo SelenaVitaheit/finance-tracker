@@ -1,24 +1,56 @@
-# README
+\# Finance Tracker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
 
-* Ruby version
+Личный трекер финансов на Ruby on Rails.
 
-* System dependencies
 
-* Configuration
 
-* Database creation
+\## Функционал
 
-* Database initialization
+\- Учет доходов/расходов
 
-* How to run the test suite
+\- Категории транзакций
 
-* Services (job queues, cache servers, search engines, etc.)
+\- Финансовые цели
 
-* Deployment instructions
+\- Графики и статистика
 
-* ...
+
+
+\## Запуск
+
+
+
+git clone https://github.com/SelenaVitaheit/finance-tracker
+
+cd finance-tracker
+
+bundle install
+
+rails db:migrate
+
+rails server
+
+
+
+
+
+
+
+\## Технологии
+
+\- Ruby on Rails 8
+
+\- Devise для аутентификации
+
+\- Bootstrap 5 для интерфейса
+
+\- Chart.js для графиков
+
+
+
+\## Разработчик
+
+Головина Алла, курс RoR
+
