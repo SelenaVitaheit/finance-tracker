@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Devise.setup do |config|
-  config.mailer_sender = 'goldalla2887@gmail.com'
+  #config.mailer_sender = 'goldalla2887@gmail.com'
 
   require 'devise/orm/active_record'
 
