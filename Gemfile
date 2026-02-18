@@ -6,3 +6,5 @@ gem 'puma', '>= 5.0'
 gem 'devise'
 gem 'kaminari'
 gem 'rspec-rails', '~> 7.0'
+gem 'thruster', require: false
+gem 'image_processing', '~> 1.2'
