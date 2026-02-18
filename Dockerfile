@@ -53,23 +53,24 @@ RUN chmod +x bin/* && \
 # Final stage for app image
 FROM base
 
-# СОЗДАЕМ ПАПКУ ДЛЯ БАЗЫ ДАННЫХ С ПРАВИЛЬНЫМИ ПРАВАМИ
-RUN mkdir -p /rails/storage && \
-    chown -R 1000:1000 /rails/storage && \
-    chmod -R 755 /rails/storage
-
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
-USER 1000:1000
-
 # Copy built artifacts: gems, application
 COPY --chown=rails:rails --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --chown=rails:rails --from=build /rails /rails
 
+# Run and own only the runtime files as a non-root user for security
+RUN groupadd --system --gid 1000 rails && \
+    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
+
+# Создаем папку для базы данных с правильными правами
+RUN mkdir -p /rails/storage && \
+    chown -R 1000:1000 /rails/storage && \
+    chmod -R 755 /rails/storage
+
+USER 1000:1000
+
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
+# Start server
 EXPOSE 80
-CMD ["sh", "-c", "rails db:prepare && rails server -b 0.0.0.0"]
+CMD ["sh", "-c", "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"]
