@@ -5,7 +5,7 @@ gem 'sqlite3'
 gem 'puma', '>= 5.0'
 gem 'devise'
 gem 'kaminari'
-gem 'rspec-rails', '~> 7.0'
+gem 'rspec-rails', '~> 8.0'
 gem "image_processing", "~> 1.2"
 gem "thruster", require: false
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
