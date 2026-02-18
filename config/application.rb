@@ -1,6 +1,11 @@
-ENV['TZINFO_DATA'] = '1'
-require 'tzinfo'
-require 'tzinfo/data'
+# Заглушка для tzinfo/data на Linux
+if ENV['RAILS_ENV'] == 'production'
+  module TZInfo
+    module Data
+      # Пустой модуль — заменяет отсутствующий гем
+    end
+  end
+end
 
 require_relative "boot"
 
