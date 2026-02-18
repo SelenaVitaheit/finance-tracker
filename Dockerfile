@@ -50,11 +50,13 @@ RUN chmod +x bin/* && \
     sed -i "s/\r$//g" bin/* && \
     sed -i 's/ruby\.exe$/ruby/' bin/*
 
-
-
-
 # Final stage for app image
 FROM base
+
+# СОЗДАЕМ ПАПКУ ДЛЯ БАЗЫ ДАННЫХ С ПРАВИЛЬНЫМИ ПРАВАМИ
+RUN mkdir -p /rails/storage && \
+    chown -R 1000:1000 /rails/storage && \
+    chmod -R 755 /rails/storage
 
 # Run and own only the runtime files as a non-root user for security
 RUN groupadd --system --gid 1000 rails && \
