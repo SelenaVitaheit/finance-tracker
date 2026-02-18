@@ -65,6 +65,7 @@ RUN groupadd --system --gid 1000 rails && \
 RUN mkdir -p /rails/storage && \
     chown -R 1000:1000 /rails/storage && \
     chmod -R 755 /rails/storage
+    chmod -R 755 /rails/storage /rails/tmp
 
 USER 1000:1000
 
