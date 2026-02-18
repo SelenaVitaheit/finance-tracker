@@ -62,9 +62,9 @@ RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash
 
 # Создаем папку для базы данных с правильными правами
-RUN mkdir -p /rails/storage && \
-    chown -R 1000:1000 /rails/storage && \
-    chmod -R 755 /rails/storage
+# Создаем папки для базы данных и временных файлов с правильными правами
+RUN mkdir -p /rails/storage /rails/tmp/cache && \
+    chown -R 1000:1000 /rails/storage /rails/tmp && \
     chmod -R 755 /rails/storage /rails/tmp
 
 USER 1000:1000
