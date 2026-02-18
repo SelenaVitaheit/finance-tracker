@@ -186,8 +186,7 @@
       <div class="card shadow h-100">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
           <h6 class="m-0 fw-bold text-warning">Финансовые цели</h6>
-          <%= link_to 'Все цели →', '#', class: 'btn btn-sm btn-outline-warning disabled' %>
-        </div>
+          </div>
         <div class="card-body">
           <% if @goals.any? %>
             <% @goals.each do |goal| %>
@@ -302,8 +301,6 @@
                 class: 'btn btn-outline-success' %>
             <%= link_to '➖ Добавить расход', new_transaction_path(type: 'expense'), 
                 class: 'btn btn-outline-danger' %>
-            <button class="btn btn-outline-warning disabled">🎯 Добавить цель</button>
-            <button class="btn btn-outline-info disabled">📊 Полный отчет</button>
           </div>
         </div>
       </div>

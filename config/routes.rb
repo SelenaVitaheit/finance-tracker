@@ -1,8 +1,5 @@
 Rails.application.routes.draw do
-  get "categories/index"
-  get "categories/show"
-  get "categories/new"
-  get "categories/edit"
+  resources :categories
   # Devise маршруты для аутентификации
   devise_for :users
   

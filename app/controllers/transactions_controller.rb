@@ -22,10 +22,11 @@ class TransactionsController < ApplicationController
     end
     
     # Фильтрация по дате (месяц)
-    if params[:month].present?
-      month = Date.strptime(params[:month], "%Y-%m")
-      @transactions = @transactions.where(date: month.beginning_of_month..month.end_of_month)
-    end
+    # Фильтрация по дате (месяц)
+# if params[:month].present?
+#   month = Date.strptime(params[:month], "%Y-%m")
+#   @transactions = @transactions.where(date: month.beginning_of_month..month.end_of_month)
+# end
     
     # Пагинация (по 20 на страницу)
     @transactions = @transactions.page(params[:page]).per(20)

@@ -75,13 +75,6 @@
               <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                 <%= link_to 'Редактировать', edit_transaction_path(@transaction), class: 'btn btn-primary me-2' %>
                 <%= link_to 'Назад к списку', transactions_path, class: 'btn btn-outline-secondary me-2' %>
-                <%= link_to 'Удалить', @transaction, 
-                    method: :delete,
-                    data: { 
-                      confirm: 'Вы уверены, что хотите удалить эту транзакцию?',
-                      turbo_confirm: 'Вы уверены, что хотите удалить эту транзакцию?'
-                    },
-                    class: 'btn btn-outline-danger' %>
               </div>
             </div>
           </div>

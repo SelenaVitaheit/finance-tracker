@@ -26,12 +26,7 @@
                 class: "btn btn-outline-danger #{params[:status] == 'expired' ? 'active' : ''}" %>
           </div>
           
-          <div class="btn-group ms-3" role="group">
-            <%= link_to 'По сроку', goals_path(sort: 'deadline'), 
-                class: "btn btn-outline-secondary #{params[:sort] == 'deadline' ? 'active' : ''}" %>
-            <%= link_to 'По прогрессу', goals_path(sort: 'progress'), 
-                class: "btn btn-outline-secondary #{params[:sort] == 'progress' ? 'active' : ''}" %>
-          </div>
+         
         </div>
       </div>
     </div>

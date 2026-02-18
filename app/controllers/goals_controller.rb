@@ -18,9 +18,9 @@ class GoalsController < ApplicationController
       @goals = @goals.where('deadline < ?', Date.today)
     end
     
-    # Сортировка
-    @goals = @goals.order(params[:sort] || 'deadline ASC')
-  end
+    # Сортировка - всегда по сроку
+   @goals = @goals.order(deadline: :asc)
+   end
   
   # GET /goals/1
   def show
