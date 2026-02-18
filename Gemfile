@@ -8,3 +8,4 @@ gem 'kaminari'
 gem 'rspec-rails', '~> 7.0'
 gem "image_processing", "~> 1.2"
 gem "thruster", require: false
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
